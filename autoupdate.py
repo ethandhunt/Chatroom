@@ -14,11 +14,12 @@ def update(filestr):
         fp.close()
         try:
             file = open(f"v{filestr}.txt")
-            vstr = file.read()
+            thing = file.read()
+            vint = int(thing[1:len(thing)])
             file.close()
         except:
-            vstr = "#"
-        if string.split("\n")[0] == vstr:
+            vint = 0
+        if int(string.split("\n")[0][1:len(string.split("\n")[0])]) == vint:
             if DEPTH < 10:
                 print(f"{filestr} source hasn't updated yet, trying again in 20 seconds")
                 thread = threading.Thread(target=update, args=filestr)
@@ -28,6 +29,7 @@ def update(filestr):
                 print("Depth Limit Exceeded, Aborting Update")
             sys.exit()
         else:
+            print("Updated Source Found")
             file = open(f"v{filestr}.txt", "w")
             vstr = file.write(string.split("\n")[0])
             file.close()
