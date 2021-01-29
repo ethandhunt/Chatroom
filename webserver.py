@@ -1,5 +1,4 @@
-#2
-#???
+#3
 import socket
 import threading
 import time
@@ -87,14 +86,14 @@ def handle_client(conn, addr, NICKS):
                             whispersubject = msg.split(" ")[1]
                             if whispersubject in NICKS:
                                 clientnum = NICKS.index(whispersubject)
-                                message = (f"WHISPER:[{crrnt_nick}]: {" ".join(string.split()[2:])}").encode(FORMAT)
+                                message = (f"WHISPER:[{crrnt_nick}]: {' '.join(msg.split()[2:])}").encode(FORMAT)
                                 msg_length = len(message)
                                 send_length = str(msg_length).encode(FORMAT)
                                 send_length += b' ' * (HEADER - len(send_length))
                                 CLIENTS[clientnum].send(send_length)
                                 CLIENTS[clientnum].send(message)
                             else:
-                                message = (f"Invalid Subject For !Whisper").encode(FORMAT)
+                                message = (f"#Invalid Subject For !Whisper").encode(FORMAT)
                                 msg_length = len(message)
                                 send_length = str(msg_length).encode(FORMAT)
                                 send_length += b' ' * (HEADER - len(send_length))
@@ -104,21 +103,21 @@ def handle_client(conn, addr, NICKS):
                             whispersubject = msg.split(" ")[1]
                             if whispersubject in NICKS:
                                 clientnum = NICKS.index(whispersubject)
-                                message = (f"WHISPER:[{crrnt_nick}]: {" ".join(string.split()[2:])}").encode(FORMAT)
+                                message = (f"@WHISPER:[{crrnt_nick}]: {' '.join(msg.split()[2:])}").encode(FORMAT)
                                 msg_length = len(message)
                                 send_length = str(msg_length).encode(FORMAT)
                                 send_length += b' ' * (HEADER - len(send_length))
                                 CLIENTS[clientnum].send(send_length)
                                 CLIENTS[clientnum].send(message)
                             else:
-                                message = (f"Invalid Subject For !Whisper").encode(FORMAT)
+                                message = (f"#Invalid Subject For !Whisper").encode(FORMAT)
                                 msg_length = len(message)
                                 send_length = str(msg_length).encode(FORMAT)
                                 send_length += b' ' * (HEADER - len(send_length))
                                 conn.send(send_length)
                                 conn.send(message)
                         else:
-                            message = (f"Invalid Command").encode(FORMAT)
+                            message = (f"@Invalid Command").encode(FORMAT)
                             msg_length = len(message)
                             send_length = str(msg_length).encode(FORMAT)
                             send_length += b' ' * (HEADER - len(send_length))
