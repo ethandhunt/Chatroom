@@ -74,10 +74,8 @@ def handle_client(conn, addr, NICKS):
                     msg_length = int(msg_length)
                     msg = conn.recv(msg_length).decode(FORMAT)
                     if msg[0] == "!":
-                        print(f"{crrnt_nick} sent a command string")
-                        print(msg)
+                        print(f"[COMMAND INVOCATION]: [{crrnt_nick}]: {msg}")
                         if msg == "!Ping":
-                            print(f"{crrnt_nick} sent a !Ping command")
                             message = (f"!Ping{time.time()}").encode(FORMAT)
                             msg_length = len(message)
                             send_length = str(msg_length).encode(FORMAT)
