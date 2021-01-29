@@ -1,6 +1,6 @@
-#2
-#???
+#3
 import urllib.request
+import threading
 
 def update(filestr):
     try:
@@ -16,7 +16,10 @@ def update(filestr):
     except urllib.error.HTTPError:
         print(f"[{filestr}] That File Doesn't Seem To Exist")
 
-update("basicupdate.py")
-update("autoupdate.py")
-update("webserver.py")
-update("webclient.py")
+def do_update(filestr):
+    thread = threading.Thread(target=update, args=filestr)
+
+do_update("basicupdate.py")
+do_update("autoupdate.py")
+do_update("webserver.py")
+do_update("webclient.py")
