@@ -43,7 +43,8 @@ def broadcast(msg):
         msg_length = len(message)
         send_length = str(msg_length).encode(FORMAT)
         send_length += b' ' * (HEADER - len(send_length))
-        new_notification("Chatroom: Message", msg)
+        if msg[0] == "@":
+            new_notification("Chatroom: Message", msg[1:len(msg)])
         for client in CLIENTS:
             try:
                 client.send(send_length)
@@ -72,10 +73,25 @@ def handle_client(conn, addr, NICKS):
                 if msg_length:
                     msg_length = int(msg_length)
                     msg = conn.recv(msg_length).decode(FORMAT)
-                    broadcast(f"[{crrnt_nick}]: {msg}")
-                    print(f"[{crrnt_nick}]: {msg}")
+                    if msg[0] == "!":
+                        print(f"{crrnt_nick} sent a command string")
+                        print(msg)
+                        if msg == "!Ping":
+                            print(f"{crrnt_nick} sent a !Ping command")
+                            message = (f"!Ping{time.time()}").encode(FORMAT)
+                            msg_length = len(message)
+                            send_length = str(msg_length).encode(FORMAT)
+                            send_length += b' ' * (HEADER - len(send_length))
+                            conn.send(send_length)
+                            conn.send(message)
+                    elif msg[0] == "@":
+                        broadcast(f"{msg[0]}[{crrnt_nick}]: {msg[1:len(msg)]}")
+                        print(f"{msg[0]}[{crrnt_nick}]: {msg[1:len(msg)]}")
+                    elif msg[0] == "#":
+                        broadcast(f"{msg[0]}[{crrnt_nick}]: {msg[1:len(msg)]}")
+                        print(f"{msg[0]}[{crrnt_nick}]: {msg[1:len(msg)]}")
             else:
-                message = ("[SERVER] Enter A Nick").encode(FORMAT)
+                message = ("#[SERVER] Enter A Nick").encode(FORMAT)
                 msg_length = len(message)
                 send_length = str(msg_length).encode(FORMAT)
                 send_length += b' ' * (HEADER - len(send_length))
@@ -85,15 +101,16 @@ def handle_client(conn, addr, NICKS):
                 if msg_length:
                     msg_length = int(msg_length)
                     crrnt_nick = conn.recv(msg_length).decode(FORMAT)
+                    crrnt_nick = crrnt_nick[1:len(crrnt_nick)]
                     if not crrnt_nick == "SERVER" and not crrnt_nick in nicks:
                         nick = True
-                        broadcast(f"{crrnt_nick} Joined The Chat")
+                        broadcast(f"@{crrnt_nick} Joined The Chat")
                         print(f"{addr} is now known as {crrnt_nick}")
-                        print(f"{crrnt_nick} Joined The Chat")
+                        print(f"@{crrnt_nick} Joined The Chat")
                         NICKS += [crrnt_nick]
                     else:
                         message = (
-                            "[SERVER] That Nick Wasn't Valid").encode(FORMAT)
+                            "#[SERVER] That Nick Wasn't Valid").encode(FORMAT)
                         msg_length = len(message)
                         send_length = str(msg_length).encode(FORMAT)
                         send_length += b' ' * (HEADER - len(send_length))
@@ -102,8 +119,8 @@ def handle_client(conn, addr, NICKS):
         except:
             connected = False
             CLIENTS.remove(conn)
-            NICKS.remove(crrnt_nick)
             if nick:
+                NICKS.remove(crrnt_nick)
                 print(f"[DISCONNECT] {crrnt_nick} Disconnected")
                 broadcast(f"[SERVER] {crrnt_nick} Disconnected")
                 new_notification("Chatroom: Client Disconnect",
@@ -115,7 +132,7 @@ def handle_client(conn, addr, NICKS):
 def server_chat_and_commands():
     while True:
         servertext = input()
-        broadcast(f"[SERVER]: {servertext}")
+        broadcast(f"@[SERVER]: {servertext}")
 
 
 def start():

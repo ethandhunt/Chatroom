@@ -28,8 +28,8 @@ except:
     print("[ERROR] Port Error, This Port May Already Be In Use On Your Machine")
 client.connect(ADDR)
 
-def send(msg):
-    message = msg.encode(FORMAT)
+def send(msg, type):
+    message = (f"{type}{msg}").encode(FORMAT)
     msg_length = len(message)
     send_length = str(msg_length).encode(FORMAT)
     send_length += b' ' * (HEADER - len(send_length))
@@ -40,10 +40,13 @@ def send(msg):
 def to():
     while True:
         try:
-            send(input())
+            string = input()
+            if string[0] == "!":
+                send(string, "")
+            else:
+                send(string, "#")
         except:
             print("[SERVER DISCONNECTED]")
-            time.sleep(2)
             sys.exit()
             break
 
@@ -54,12 +57,18 @@ def back():
             if msg_length:
                 msg_length = int(msg_length)
                 msg = client.recv(msg_length).decode(FORMAT)
-                print(msg)
-                new_notification("Chatroom: Message", msg)
+                if msg[0] == "@":
+                    new_notification("Chatroom: Message", msg[1:len(msg)])
+                elif msg[0] == "!":
+                    if msg[0:5] == "!Ping":
+                        servertime = float(msg[5:len(msg)])
+                        print(time.time() - servertime)
+                else:
+                    print(msg[1:len(msg)])
+
         except:
             new_notification("Chatroom: Alert", "[SERVER DISCONNECTED]")
             print("[SERVER DISCONNECTED]")
-            time.sleep(2)
             sys.exit()
             break
 
