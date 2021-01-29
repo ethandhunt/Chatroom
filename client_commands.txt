@@ -1,0 +1,6 @@
+!Ping
+    Returns server time then checks the difference btween received server time and the current client time
+!Whisper {Nick of target client} {message}
+    Sends a message to the targeted client
+!w {Nick of target client} {message}
+    Same as !Whisper
