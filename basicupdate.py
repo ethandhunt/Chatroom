@@ -1,4 +1,4 @@
-#1
+#2
 import urllib.request
 
 def update(filestr):
@@ -18,4 +18,4 @@ def update(filestr):
 update("basicupdate.py")
 update("autoupdate.py")
 update("webserver.py")
-update("webclient")
+update("webclient.py")
