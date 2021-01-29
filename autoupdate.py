@@ -5,10 +5,9 @@ import sys
 import threading
 import time
 CRL = 10
-DEPTH = 0
 
 
-def update(filestr):
+def update(filestr, DEPTH=0):
     try:
         fp = urllib.request.urlopen(f"https://raw.githubusercontent.com/ethandhunt/Chatroom/main/{filestr}")
         mybytes = fp.read()
@@ -23,30 +22,35 @@ def update(filestr):
             vint = 0
         if int(string.split("\n")[0][1:len(string.split("\n")[0])]) == vint:
             if DEPTH < CRL:
-                print(f"{filestr} source hasn't updated yet, trying again in 20 seconds")
-                thread = threading.Thread(target=update, args=filestr)
+                DEPTH += 1
+                print(f"[{filestr}] Source hasn't updated yet, trying again in 20 seconds")
+                thread = threading.Thread(target=update, args=(filestr, DEPTH))
                 time.sleep(20)
                 thread.start()
                 sys.exit()
             else:
-                print("Depth Limit Exceeded, Aborting Update")
+                print(f"[{filestr}] Aborting Update")
         else:
-            print("Updated Source Found")
+            print(f"[{filestr}] Updated Source Found")
             file = open(f"v{filestr}.txt", "w")
             file.close()
         
         file = open(filestr, "w")
         file.write(string)
         file.close()
-        print(f"Updated {filestr}")
+        print(f"[{filestr}] Update Complete")
     except urllib.error.HTTPError:
-        print("That File Doesn't Seem To Exist")
+        print(f"[{filestr}] That File Doesn't Seem To Exist")
 
 
-thread = threading.Thread(target=update, args=(["webclient.py"]))
+def do_update(filestr):
+    update(filestr)
+
+
+thread = threading.Thread(target=do_update, args=(["webclient.py"]))
 thread.start()
-thread = threading.Thread(target=update, args=(["webserver.py"]))
+thread = threading.Thread(target=do_update, args=(["webserver.py"]))
 thread.start()
-thread = threading.Thread(target=update, args=(["autoupdate.py"]))
+thread = threading.Thread(target=do_update, args=(["autoupdate.py"]))
 thread.start()
 input("You Can Close This Window Now")
