@@ -1,4 +1,4 @@
-#3
+#4
 import socket
 import threading
 import time
@@ -86,7 +86,7 @@ def handle_client(conn, addr, NICKS):
                             whispersubject = msg.split(" ")[1]
                             if whispersubject in NICKS:
                                 clientnum = NICKS.index(whispersubject)
-                                message = (f"WHISPER:[{crrnt_nick}]: {' '.join(msg.split()[2:])}").encode(FORMAT)
+                                message = (f"@WHISPER:[{crrnt_nick}]: {' '.join(msg.split()[2:])}").encode(FORMAT)
                                 msg_length = len(message)
                                 send_length = str(msg_length).encode(FORMAT)
                                 send_length += b' ' * (HEADER - len(send_length))
