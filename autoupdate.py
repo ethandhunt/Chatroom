@@ -1,4 +1,5 @@
-#4
+#5
+#???
 import urllib.request
 import sys
 import threading
@@ -42,10 +43,10 @@ def update(filestr):
         print("That File Doesn't Seem To Exist")
 
 
-thread = threading.Thread(target=update, args="webclient.py")
+thread = threading.Thread(target=update, args=(["webclient.py"]))
 thread.start()
-thread = threading.Thread(target=update, args="webserver.py")
+thread = threading.Thread(target=update, args=(["webserver.py"]))
 thread.start()
-thread = threading.Thread(target=update, args="autoupdate.py")
+thread = threading.Thread(target=update, args=(["autoupdate.py"]))
 thread.start()
 input("You Can Close This Window Now")
