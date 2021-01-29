@@ -1,6 +1,8 @@
-#4
+#5
+#???
 import urllib.request
 import threading
+NEWLINE = "\n"
 
 def update(filestr):
     try:
@@ -13,11 +15,12 @@ def update(filestr):
         file.write(string)
         file.close()
         print(f"[{filestr}] Update Complete")
+        print(f"[{filestr}] Updated To {string.split(NEWLINE)[0]}")
     except urllib.error.HTTPError:
         print(f"[{filestr}] That File Doesn't Seem To Exist")
 
 def do_update(filestr):
-    thread = threading.Thread(target=update, args=filestr)
+    thread = threading.Thread(target=update, args=[filestr])
     thread.start()
 
 do_update("basicupdate.py")
