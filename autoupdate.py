@@ -7,6 +7,7 @@ def update(filestr):
         string = mybytes.decode("utf8")
         fp.close()
         file = open(filestr, "w")
+        # ???
         file.write(string)
         file.close()
         print(f"Updated {filestr}")
