@@ -14,4 +14,7 @@ def update(filestr):
     except urllib.error.HTTPError:
         print(f"[{filestr}] That File Doesn't Seem To Exist")
 
-update("")
+update("basicupdate.py")
+update("autoupdate.py")
+update("webserver.py")
+update("webclient")
