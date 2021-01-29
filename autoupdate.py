@@ -3,6 +3,8 @@ import urllib.request
 import sys
 import threading
 import time
+DEPTH = 0
+
 
 def update(filestr):
     try:
@@ -17,9 +19,13 @@ def update(filestr):
         except:
             vstr = "#"
         if string.split("\n")[0] == vstr:
-            thread = threading.Thread(target=update, args=filestr)
-            time.sleep(20)
-            thread.start()
+            if DEPTH < 10:
+                print(f"{filestr} source hasn't updated yet, trying again in 20 seconds")
+                thread = threading.Thread(target=update, args=filestr)
+                time.sleep(20)
+                thread.start()
+            else:
+                print("Depth Limit Exceeded, Aborting Update")
             sys.exit()
         else:
             file = open(f"v{filestr}.txt", "w")
