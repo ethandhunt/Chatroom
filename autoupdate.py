@@ -1,5 +1,4 @@
-#7
-#???
+#8
 import urllib.request
 import sys
 import threading
@@ -19,7 +18,7 @@ def update(filestr, DEPTH=0):
             vint = int(thing[1:len(thing)])
             file.close()
         except:
-            vint = 0
+            vint = -1
         if int(string.split("\n")[0][1:len(string.split("\n")[0])]) == vint:
             if DEPTH < CRL:
                 DEPTH += 1
