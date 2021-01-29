@@ -59,10 +59,11 @@ def back():
                 msg = client.recv(msg_length).decode(FORMAT)
                 if msg[0] == "@":
                     new_notification("Chatroom: Message", msg[1:len(msg)])
+                    print(msg[1:len(msg)])
                 elif msg[0] == "!":
                     if msg[0:5] == "!Ping":
                         servertime = float(msg[5:len(msg)])
-                        print(time.time() - servertime)
+                        print(servertime - time.time())
                 else:
                     print(msg[1:len(msg)])
 
