@@ -82,6 +82,13 @@ def handle_client(conn, addr, NICKS):
                             send_length += b' ' * (HEADER - len(send_length))
                             conn.send(send_length)
                             conn.send(message)
+                        else:
+                            message = (f"Invalid Command").encode(FORMAT)
+                            msg_length = len(message)
+                            send_length = str(msg_length).encode(FORMAT)
+                            send_length += b' ' * (HEADER - len(send_length))
+                            conn.send(send_length)
+                            conn.send(message)
                     elif msg[0] == "@":
                         broadcast(f"{msg[0]}[{crrnt_nick}]: {msg[1:len(msg)]}")
                         print(f"{msg[0]}[{crrnt_nick}]: {msg[1:len(msg)]}")
