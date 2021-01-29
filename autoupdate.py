@@ -1,4 +1,4 @@
-#3
+#4
 import urllib.request
 import sys
 import threading
@@ -32,7 +32,6 @@ def update(filestr):
         else:
             print("Updated Source Found")
             file = open(f"v{filestr}.txt", "w")
-            vstr = file.write(string.split("\n")[0])
             file.close()
         
         file = open(filestr, "w")
@@ -43,7 +42,10 @@ def update(filestr):
         print("That File Doesn't Seem To Exist")
 
 
-update("webclient.py")
-update("webserver.py")
-update("autoupdate.py")
+thread = threading.Thread(target=update, args="webclient.py")
+thread.start()
+thread = threading.Thread(target=update, args="webserver.py")
+thread.start()
+thread = threading.Thread(target=update, args="autoupdate.py")
+thread.start()
 input("You Can Close This Window Now")
