@@ -2,6 +2,7 @@ import socket
 import threading
 import sys
 import time
+import math
 try:
     from notifypy import Notify
 except:
@@ -63,7 +64,7 @@ def back():
                 elif msg[0] == "!":
                     if msg[0:5] == "!Ping":
                         servertime = float(msg[5:len(msg)])
-                        print(servertime - time.time())
+                        print(math.sqrt((time.time() - servertime) ** 2))
                 else:
                     print(msg[1:len(msg)])
 
