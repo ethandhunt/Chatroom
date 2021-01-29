@@ -14,7 +14,6 @@ def update(filestr):
         file = open(filestr, "w")
         file.write(string)
         file.close()
-        print(f"[{filestr}] Update Complete")
         print(f"[{filestr}] Updated To {string.split(NEWLINE)[0]}")
     except urllib.error.HTTPError:
         print(f"[{filestr}] That File Doesn't Seem To Exist")
