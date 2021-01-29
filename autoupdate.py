@@ -1,4 +1,4 @@
-#8
+#9
 import urllib.request
 import sys
 import threading
@@ -52,4 +52,6 @@ thread.start()
 thread = threading.Thread(target=do_update, args=(["webserver.py"]))
 thread.start()
 thread = threading.Thread(target=do_update, args=(["autoupdate.py"]))
+thread.start()
+thread = threading.Thread(target=do_update, args=(["basicupdate.py"]))
 thread.start()
