@@ -32,6 +32,7 @@ def update(filestr, DEPTH=0):
         else:
             print(f"[{filestr}] Updated Source Found")
             file = open(f"v{filestr}.txt", "w")
+            file.write(string.split("\n")[0])
             file.close()
         
         file = open(filestr, "w")
