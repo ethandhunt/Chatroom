@@ -63,7 +63,6 @@ def handle_client(conn, addr, NICKS):
     print(f"[NEW CONNECTION] {str(addr)} Connected")
     CLIENTS.append(conn)
     nick = False
-    nicks = NICKS
     crrnt_nick = ""
 
     connected = True
@@ -83,6 +82,40 @@ def handle_client(conn, addr, NICKS):
                             send_length += b' ' * (HEADER - len(send_length))
                             conn.send(send_length)
                             conn.send(message)
+                        elif msg[:9] == "!Whisper ":
+                            whispersubject = msg.split(" ")[1]
+                            if whispersubject in NICKS:
+                                clientnum = NICKS.index(whispersubject)
+                                message = (f"WHISPER:[{crrnt_nick}]: {" ".join(string.split()[2:])}").encode(FORMAT)
+                                msg_length = len(message)
+                                send_length = str(msg_length).encode(FORMAT)
+                                send_length += b' ' * (HEADER - len(send_length))
+                                CLIENTS[clientnum].send(send_length)
+                                CLIENTS[clientnum].send(message)
+                            else:
+                                message = (f"Invalid Subject For !Whisper").encode(FORMAT)
+                                msg_length = len(message)
+                                send_length = str(msg_length).encode(FORMAT)
+                                send_length += b' ' * (HEADER - len(send_length))
+                                conn.send(send_length)
+                                conn.send(message)
+                        elif msg[:3] == "!w ":
+                            whispersubject = msg.split(" ")[1]
+                            if whispersubject in NICKS:
+                                clientnum = NICKS.index(whispersubject)
+                                message = (f"WHISPER:[{crrnt_nick}]: {" ".join(string.split()[2:])}").encode(FORMAT)
+                                msg_length = len(message)
+                                send_length = str(msg_length).encode(FORMAT)
+                                send_length += b' ' * (HEADER - len(send_length))
+                                CLIENTS[clientnum].send(send_length)
+                                CLIENTS[clientnum].send(message)
+                            else:
+                                message = (f"Invalid Subject For !Whisper").encode(FORMAT)
+                                msg_length = len(message)
+                                send_length = str(msg_length).encode(FORMAT)
+                                send_length += b' ' * (HEADER - len(send_length))
+                                conn.send(send_length)
+                                conn.send(message)
                         else:
                             message = (f"Invalid Command").encode(FORMAT)
                             msg_length = len(message)
@@ -108,7 +141,7 @@ def handle_client(conn, addr, NICKS):
                     msg_length = int(msg_length)
                     crrnt_nick = conn.recv(msg_length).decode(FORMAT)
                     crrnt_nick = crrnt_nick[1:len(crrnt_nick)]
-                    if not crrnt_nick == "SERVER" and not crrnt_nick in nicks:
+                    if not crrnt_nick == "SERVER" and not crrnt_nick in NICKS:
                         nick = True
                         broadcast(f"@{crrnt_nick} Joined The Chat")
                         print(f"{addr} is now known as {crrnt_nick}")
