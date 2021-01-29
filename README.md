@@ -1,2 +1,2 @@
 # Chatroom
-python chatroom using sockets
+Python chatroom using sockets
