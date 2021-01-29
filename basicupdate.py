@@ -1,4 +1,4 @@
-#3
+#4
 import urllib.request
 import threading
 
@@ -18,6 +18,7 @@ def update(filestr):
 
 def do_update(filestr):
     thread = threading.Thread(target=update, args=filestr)
+    thread.start()
 
 do_update("basicupdate.py")
 do_update("autoupdate.py")
