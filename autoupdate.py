@@ -7,7 +7,7 @@ def update(filestr):
         string = mybytes.decode("utf8")
         fp.close()
         file = open(filestr, "w")
-        file.write(str("\n".join(string.split("\n"))))
+        file.write(string)
         file.close()
         print(f"Updated {filestr}")
     except urllib.error.HTTPError:
