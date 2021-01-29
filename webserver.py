@@ -1,3 +1,4 @@
+#1
 import socket
 import threading
 import time
@@ -127,7 +128,7 @@ def handle_client(conn, addr, NICKS):
             if nick:
                 NICKS.remove(crrnt_nick)
                 print(f"[DISCONNECT] {crrnt_nick} Disconnected")
-                broadcast(f"[SERVER] {crrnt_nick} Disconnected")
+                broadcast(f"@[SERVER] {crrnt_nick} Disconnected")
                 new_notification("Chatroom: Client Disconnect",
                                 f"{crrnt_nick} Disconnected")
             else:
