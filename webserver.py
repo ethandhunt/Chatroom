@@ -182,7 +182,7 @@ def server_chat_and_commands():
                     send_length += b' ' * (HEADER - len(send_length))
                     CLIENTS[clientnum].send(send_length)
                     CLIENTS[clientnum].send(message)
-                    CLIENTS.remove(CLIENTS[clientnum])
+                    CLIENTS.pop(clientnum)
                     NICKS.remove(target)
                     broadcast(f"@[SERVER] {target} Got Kicked")
 
