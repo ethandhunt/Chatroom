@@ -48,10 +48,11 @@ def to():
                 string = input()
                 if KICKED:
                     sys.exit()
-                if string[0] == "!":
-                    send(string, "")
-                else:
-                    send(string, "#")
+                if not string == "":
+                    if string[0] == "!":
+                        send(string, "")
+                    else:
+                        send(string, "#")
             except:
                 print("[SERVER DISCONNECTED]")
                 sys.exit()
