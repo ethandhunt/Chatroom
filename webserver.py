@@ -171,7 +171,25 @@ def handle_client(conn, addr, NICKS):
 def server_chat_and_commands():
     while True:
         servertext = input()
-        broadcast(f"@[SERVER]: {servertext}")
+        if servertext[0] == "!":
+            if servertext[:6] == "!Kick ":
+                target = servertext.split()[1]
+                if target in NICKS:
+                    clientnum = NICKS.index(target)
+                    message = ("You Have Been Kicked By The Server").encode(FORMAT)
+                    msg_length = len(message)
+                    send_length = str(msg_length).encode(FORMAT)
+                    send_length += b' ' * (HEADER - len(send_length))
+                    CLIENTS[clientnum].send(send_length)
+                    CLIENTS[clientnum].send(message)
+                    CLIENTS.remove(CLIENTS[clientnum])
+                    NICKS.remove(target)
+                    broadcast(f"@[SERVER] {target} Got Kicked")
+
+            else:
+                print("Invalid Command")
+        else:
+            broadcast(f"@[SERVER]: {servertext}")
 
 
 def start():
