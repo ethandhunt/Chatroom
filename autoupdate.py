@@ -5,6 +5,7 @@ import time
 import urllib.request
 
 CRL = 3
+NEWLINE = "\n"
 
 
 def update(filestr, DEPTH=0):
@@ -34,7 +35,7 @@ def update(filestr, DEPTH=0):
                 file = open(filestr, "w")
                 file.write(newstring)
                 file.close()
-                print(f"[{filestr}] Update Complete")
+                print(f"[{filestr}] Updated To {newstring.split(NEWLINE)[0]}")
         except:
             file = open(filestr, "w")
             file.write(newstring)
