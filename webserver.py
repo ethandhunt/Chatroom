@@ -21,6 +21,7 @@ port_got = False
 PORT = 5050
 FORMAT = 'utf-8'
 NICKS = []
+
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 # gets ipv4 address of local machine
 # ONLY WORKS ON LOCAL NETWORK
@@ -36,6 +37,7 @@ while not port_got:
 
 
 CLIENTS = []
+KICKED_CLIENTS = []
 
 
 def broadcast(msg):
@@ -60,15 +62,22 @@ def broadcast(msg):
 
 
 def handle_client(conn, addr, NICKS):
+    global CLIENTS
+    global KICKED_CLIENTS
     print(f"[NEW CONNECTION] {str(addr)} Connected")
     CLIENTS.append(conn)
     nick = False
+    kicked = False
     crrnt_nick = ""
 
     connected = True
     while connected:
         try:
             if nick:
+                if myclientnum in KICKED_CLIENTS:
+                    kicked = True
+                    break
+                myclientnum = CLIENTS.index(conn)
                 msg_length = conn.recv(HEADER).decode(FORMAT)
                 if msg_length:
                     msg_length = int(msg_length)
@@ -156,40 +165,53 @@ def handle_client(conn, addr, NICKS):
                         conn.send(send_length)
                         conn.send(message)
         except:
-            connected = False
-            CLIENTS.remove(conn)
-            if nick:
-                NICKS.remove(crrnt_nick)
-                print(f"[DISCONNECT] {crrnt_nick} Disconnected")
-                broadcast(f"@[SERVER] {crrnt_nick} Disconnected")
-                new_notification("Chatroom: Client Disconnect",
-                                f"{crrnt_nick} Disconnected")
-            else:
-                print(f"[DISCONNECT] {addr} Disconnected")
+            if not kicked:
+                connected = False
+                try:
+                    CLIENTS.remove(conn)
+                except:
+                    pass
+                if nick:
+                    try:
+                        NICKS.remove(crrnt_nick)
+                    except:
+                        pass
+                    print(f"[DISCONNECT] {crrnt_nick} Disconnected")
+                    broadcast(f"@[SERVER] {crrnt_nick} Disconnected")
+                    new_notification("Chatroom: Client Disconnect",
+                                    f"{crrnt_nick} Disconnected")
+                else:
+                    print(f"[DISCONNECT] {addr} Disconnected")
 
 
 def server_chat_and_commands():
+    global KICKED_CLIENTS
     while True:
         servertext = input()
         if servertext[0] == "!":
-            if servertext[:6] == "!Kick ":
-                target = servertext.split()[1]
-                if target in NICKS:
-                    clientnum = NICKS.index(target)
-                    message = ("You Have Been Kicked By The Server").encode(FORMAT)
-                    msg_length = len(message)
-                    send_length = str(msg_length).encode(FORMAT)
-                    send_length += b' ' * (HEADER - len(send_length))
-                    CLIENTS[clientnum].send(send_length)
-                    CLIENTS[clientnum].send(message)
-                    CLIENTS.pop(clientnum)
-                    NICKS.remove(target)
-                    broadcast(f"@[SERVER] {target} Got Kicked")
+            if servertext[:5] == "!Kick":
+                try:
+                    target = servertext.split()[1]
+                    if target in NICKS:
+                        clientnum = NICKS.index(target)
+                        message = ("!You Have Been Kicked By The Server").encode(FORMAT)
+                        msg_length = len(message)
+                        send_length = str(msg_length).encode(FORMAT)
+                        send_length += b' ' * (HEADER - len(send_length))
+                        CLIENTS[clientnum].send(send_length)
+                        CLIENTS[clientnum].send(message)
+                        KICKED_CLIENTS += clientnum
+                        CLIENTS.pop(clientnum)
+                        NICKS.remove(target)
+                        broadcast(f"@[SERVER] {target} Got Kicked")
+                except:
+                    print("[ERROR] Command Had No Target")
 
             else:
                 print("Invalid Command")
         else:
             broadcast(f"@[SERVER]: {servertext}")
+            print(f"@[SERVER]: {servertext}")
 
 
 def start():

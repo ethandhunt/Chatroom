@@ -24,6 +24,7 @@ FORMAT = 'utf-8'
 SERVER = input("Enter Local Network Server IP: ")
 PORT = int(input("Enter Server Port: "))
 ADDR = (SERVER, PORT)
+KICKED = False
 try:
     client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 except:
@@ -40,7 +41,8 @@ def send(msg, type):
 
 
 def to():
-    while True:
+    global KICKED
+    while not KICKED:
         try:
             string = input()
             if string[0] == "!":
@@ -53,7 +55,8 @@ def to():
             break
 
 def back():
-    while True:
+    global KICKED
+    while not KICKED:
         try:
             msg_length = client.recv(HEADER).decode(FORMAT)
             if msg_length:
@@ -66,6 +69,8 @@ def back():
                     if msg[0:5] == "!Ping":
                         servertime = float(msg[5:len(msg)])
                         print(math.sqrt((time.time() - servertime) ** 2))
+                    if msg == "!You Have Been Kicked By The Server":
+                        KICKED = True
                 else:
                     print(msg[1:len(msg)])
 
