@@ -40,7 +40,7 @@ def update(filestr, DEPTH=0):
             file = open(filestr, "w")
             file.write(newstring)
             file.close()
-            print(f"[{filestr}] Install Complete")
+            print(f"[{filestr}] Installed Version {newstring.split(NEWLINE)[0]}")
 
     except urllib.error.HTTPError:
         print(f"[{filestr}] That File Doesn't Seem To Exist")
