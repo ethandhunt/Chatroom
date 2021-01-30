@@ -43,16 +43,19 @@ def send(msg, type):
 def to():
     global KICKED
     while not KICKED:
-        try:
-            string = input()
-            if string[0] == "!":
-                send(string, "")
-            else:
-                send(string, "#")
-        except:
-            print("[SERVER DISCONNECTED]")
-            sys.exit()
-            break
+        if not KICKED:
+            try:
+                string = input()
+                if KICKED:
+                    sys.exit()
+                if string[0] == "!":
+                    send(string, "")
+                else:
+                    send(string, "#")
+            except:
+                print("[SERVER DISCONNECTED]")
+                sys.exit()
+                break
 
 def back():
     global KICKED
@@ -71,6 +74,7 @@ def back():
                         print(math.sqrt((time.time() - servertime) ** 2))
                     if msg == "!You Have Been Kicked By The Server":
                         KICKED = True
+                        print("You Have Been Kicked By The Server")
                 else:
                     print(msg[1:len(msg)])
 

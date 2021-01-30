@@ -1,4 +1,4 @@
-#4
+#5
 import socket
 import threading
 import time
@@ -69,6 +69,7 @@ def handle_client(conn, addr, NICKS):
     nick = False
     kicked = False
     crrnt_nick = ""
+    myclientnum = CLIENTS.index(conn)
 
     connected = True
     while connected:
@@ -192,20 +193,22 @@ def server_chat_and_commands():
             if servertext[:5] == "!Kick":
                 try:
                     target = servertext.split()[1]
-                    if target in NICKS:
-                        clientnum = NICKS.index(target)
-                        message = ("!You Have Been Kicked By The Server").encode(FORMAT)
-                        msg_length = len(message)
-                        send_length = str(msg_length).encode(FORMAT)
-                        send_length += b' ' * (HEADER - len(send_length))
-                        CLIENTS[clientnum].send(send_length)
-                        CLIENTS[clientnum].send(message)
-                        KICKED_CLIENTS += clientnum
-                        CLIENTS.pop(clientnum)
-                        NICKS.remove(target)
-                        broadcast(f"@[SERVER] {target} Got Kicked")
                 except:
                     print("[ERROR] Command Had No Target")
+                if target in NICKS:
+                    clientnum = NICKS.index(target)
+                    message = ("!You Have Been Kicked By The Server").encode(FORMAT)
+                    msg_length = len(message)
+                    send_length = str(msg_length).encode(FORMAT)
+                    send_length += b' ' * (HEADER - len(send_length))
+                    CLIENTS[clientnum].send(send_length)
+                    CLIENTS[clientnum].send(message)
+                    KICKED_CLIENTS.append(clientnum)
+                    CLIENTS.pop(clientnum)
+                    NICKS.remove(target)
+                    broadcast(f"@[SERVER] Kicked {target}")
+                    print(f"[SERVER] Kicked {target}")
+
 
             else:
                 print("Invalid Command")
