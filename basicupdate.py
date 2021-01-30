@@ -1,4 +1,4 @@
-#6
+#7
 import urllib.request
 import threading
 NEWLINE = "\n"
@@ -27,3 +27,4 @@ do_update("webserver.py")
 do_update("webclient.py")
 do_update("client_commands.txt")
 do_update("server_commands.txt")
+input()
