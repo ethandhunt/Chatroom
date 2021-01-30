@@ -1,44 +1,46 @@
-#9
-import urllib.request
+#10
 import sys
 import threading
 import time
+import urllib.request
+
 CRL = 10
 
 
 def update(filestr, DEPTH=0):
     try:
-        fp = urllib.request.urlopen(f"https://raw.githubusercontent.com/ethandhunt/Chatroom/main/{filestr}")
+        fp = urllib.request.urlopen(
+            f"https://raw.githubusercontent.com/ethandhunt/Chatroom/main/{filestr}")
         mybytes = fp.read()
-        string = mybytes.decode("utf8")
+        newstring = mybytes.decode("utf8")
         fp.close()
         try:
-            file = open(f"v{filestr}.txt")
-            thing = file.read()
-            vint = int(thing[1:len(thing)])
+            file = open(f"{filestr}")
+            oldstring = file.read()
             file.close()
-        except:
-            vint = -1
-        if int(string.split("\n")[0][1:len(string.split("\n")[0])]) == vint:
-            if DEPTH < CRL:
-                DEPTH += 1
-                print(f"[{filestr}] Source hasn't updated yet, trying again in 20 seconds")
-                thread = threading.Thread(target=update, args=(filestr, DEPTH))
-                time.sleep(20)
-                thread.start()
-                sys.exit()
+            if newstring == oldstring:
+                if DEPTH < CRL:
+                    DEPTH += 1
+                    print(
+                        f"[{filestr}] Source hasn't updated yet, trying again in 20 seconds")
+                    thread = threading.Thread(
+                        target=update, args=(filestr, DEPTH))
+                    time.sleep(20)
+                    thread.start()
+                else:
+                    print(f"[{filestr}] Aborting Update")
             else:
-                print(f"[{filestr}] Aborting Update")
-        else:
-            print(f"[{filestr}] Updated Source Found")
-            file = open(f"v{filestr}.txt", "w")
-            file.write(string.split("\n")[0])
+                print(f"[{filestr}] Updated Source Found")
+                file = open(filestr, "w")
+                file.write(newstring)
+                file.close()
+                print(f"[{filestr}] Update Complete")
+        except:
+            file = open(filestr, "w")
+            file.write(newstring)
             file.close()
-        
-        file = open(filestr, "w")
-        file.write(string)
-        file.close()
-        print(f"[{filestr}] Update Complete")
+            print(f"[{filestr}] Install Complete")
+
     except urllib.error.HTTPError:
         print(f"[{filestr}] That File Doesn't Seem To Exist")
 
