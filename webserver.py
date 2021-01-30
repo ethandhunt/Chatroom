@@ -151,7 +151,7 @@ def handle_client(conn, addr, NICKS):
                     msg_length = int(msg_length)
                     crrnt_nick = conn.recv(msg_length).decode(FORMAT)
                     crrnt_nick = crrnt_nick[1:len(crrnt_nick)]
-                    if not crrnt_nick == "SERVER" and not crrnt_nick in NICKS:
+                    if not crrnt_nick == "SERVER" and not crrnt_nick in NICKS and not " " in crrnt_nick:
                         nick = True
                         broadcast(f"@{crrnt_nick} Joined The Chat")
                         print(f"{addr} is now known as {crrnt_nick}")
