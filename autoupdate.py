@@ -4,7 +4,7 @@ import threading
 import time
 import urllib.request
 
-CRL = 10
+CRL = 3
 
 
 def update(filestr, DEPTH=0):
