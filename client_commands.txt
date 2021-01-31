@@ -5,3 +5,5 @@
     Sends a message to the targeted client
 !w {Nick of target client} {message}
     Same as !Whisper
+!Online
+    Returns all nicks in the servers Nick array
