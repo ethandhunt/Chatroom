@@ -1,5 +1,4 @@
-#3
-#???
+#4
 import socket
 import threading
 import sys
@@ -32,13 +31,21 @@ except:
     print("[ERROR] Port Error, This Port May Already Be In Use On Your Machine")
 client.connect(ADDR)
 
-def send(msg, type):
+def send(msg, type = ""):
     message = (f"{type}{msg}").encode(FORMAT)
     msg_length = len(message)
     send_length = str(msg_length).encode(FORMAT)
     send_length += b' ' * (HEADER - len(send_length))
     client.send(send_length)
     client.send(message)
+
+def timer(delay):
+    global connection_confirmed
+    global KICKED
+    connection_confirmed = False
+    time.sleep(delay)
+    if not connection_confirmed:
+        KICKED = True
 
 
 def to():
@@ -51,7 +58,12 @@ def to():
                     sys.exit()
                 if not string == "":
                     if string[0] == "!":
-                        send(string, "")
+                        if string == "!CheckConnection" or string == "!CheckConnec" or string == "!Chc":
+                            send("!CheckConnec")
+                            thread = threading.Thread(target=timer, args=10)
+                            thread.start()
+                        else:
+                            send(string)
                     else:
                         send(string, "#")
             except:
@@ -60,6 +72,7 @@ def to():
                 break
 
 def back():
+    global connection_confirmed
     global KICKED
     while not KICKED:
         try:
@@ -74,9 +87,12 @@ def back():
                     if msg[0:5] == "!Ping":
                         servertime = float(msg[5:len(msg)])
                         print(math.sqrt((time.time() - servertime) ** 2))
-                    if msg == "!You Have Been Kicked By The Server":
+                    elif msg == "!You Have Been Kicked By The Server":
                         KICKED = True
                         print("You Have Been Kicked By The Server")
+                    elif msg == "!ConnectTrue":
+                        connection_confirmed = True
+
                 else:
                     print(msg[1:len(msg)])
 
