@@ -1,5 +1,4 @@
-#7
-#???
+#8
 import socket
 import threading
 import time
@@ -129,12 +128,12 @@ def handle_client(conn, addr, NICKS):
                                 conn.send(message)
                         elif msg == "!Online":
                             for nickname in NICKS:
-                                message = (f"{nickname} is Online").encode(FORMAT)
+                                message = (f"#{nickname} is Online").encode(FORMAT)
                                 msg_length = len(message)
                                 send_length = str(msg_length).encode(FORMAT)
                                 send_length += b' ' * (HEADER - len(send_length))
-                                CLIENTS[clientnum].send(send_length)
-                                CLIENTS[clientnum].send(message)
+                                conn.send(send_length)
+                                conn.send(message)
                         else:
                             message = (f"@Invalid Command").encode(FORMAT)
                             msg_length = len(message)
