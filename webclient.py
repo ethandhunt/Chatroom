@@ -39,7 +39,7 @@ def send(msg, type = ""):
     client.send(send_length)
     client.send(message)
 
-def timer(delay):
+def checkconnectiontimer(delay):
     global connection_confirmed
     global KICKED
     connection_confirmed = False
@@ -60,7 +60,7 @@ def to():
                     if string[0] == "!":
                         if string == "!CheckConnection" or string == "!CheckConnec" or string == "!Chc":
                             send("!CheckConnec")
-                            thread = threading.Thread(target=timer, args=10)
+                            thread = threading.Thread(target=checkconnectiontimer, args=(10,))
                             thread.start()
                         else:
                             send(string)
@@ -92,6 +92,7 @@ def back():
                         print("You Have Been Kicked By The Server")
                     elif msg == "!ConnectTrue":
                         connection_confirmed = True
+                        print("Connection Confirmed")
 
                 else:
                     print(msg[1:len(msg)])
