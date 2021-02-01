@@ -13,3 +13,7 @@
     Same as !CheckConnection
 !Chc
     Same as !CheckConnection
+!VoteKick {Nick of target client}
+    Initiates a VoteKick on the target client
+!Vote
+    Votes to do what ever is being voted on currently
