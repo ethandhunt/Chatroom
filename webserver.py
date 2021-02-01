@@ -4,17 +4,21 @@ import threading
 import time
 try:
     from notifypy import Notify
-
-    def new_notification(title, message):
-        try:
-            notification = Notify()
-            notification.title = title
-            notification.message = message
-            notification.send()
-        except:
-            pass
 except:
     pass
+
+def base_notifc(title, message):
+    try:
+        notification = Notify()
+        notification.title = title
+        notification.message = message
+        notification.send()
+    except:
+        pass
+
+def new_notification(title, message):
+    thread = threading.Thread(target=base_notifc, args=(title, message))
+    thread.start
 
 HEADER = 64
 port_got = False
@@ -106,16 +110,16 @@ def votekick_timer(delay, initiator, Subject):
     global VOTE_ID
     VOTES = 0
     time.sleep(delay)
-    broadcast("Votekick Over")
-    broadcast(f"{Subject} got {VOTES} votes against them")
-    if VOTES > client_count / 2:
-        broadcast(f"{VOTES} is greater than half of the current online clients")
-        broadcast(f"{Subject} has been kicked")
+    broadcast("#Votekick Over")
+    broadcast(f"#{Subject} got {VOTES} votes against them")
+    if VOTES > client_count() / 2:
+        broadcast(f"#{VOTES} is greater than half of the current online clients")
+        broadcast(f"@{Subject} has been kicked")
         send(get_client(Subject), "!You Have Been Kicked By The Server")
         remove_nick_FULL(Subject)
     else:
-        broadcast(f"{VOTES} is not greater than half of the online clients")
-        broadcast(f"{Subject} has not been kicked")
+        broadcast(f"#{VOTES} is not greater than half of the online clients")
+        broadcast(f"#{Subject} has not been kicked")
     VOTES = False
     VOTE_IN_PROGRESS = False
     VOTE_ID += 1
@@ -127,6 +131,7 @@ def handle_client(conn, addr, NICKS):
     global VOTEKICK_SUBJECT
     global VOTE_IN_PROGRESS
     global VOTES
+    Voted = False
     print(f"[NEW CONNECTION] {str(addr)} Connected")
     CLIENTS.append(conn)
     nick = False
@@ -175,9 +180,13 @@ def handle_client(conn, addr, NICKS):
                             if not VOTE_IN_PROGRESS:
                                 try:
                                     Subject = msg.split(" ")[1]
+                                    flag_badsubject = False
                                 except:
                                     send(conn, "#Invalid Subject For !Votekick")
-                                if Subject in NICKS:
+                                    flag_badsubject = True
+                                if flag_badsubject:
+                                    pass
+                                elif Subject in NICKS:
                                     if not Subject == crrnt_nick:
                                         VOTEKICK_SUBJECT = Subject
                                         VOTE_IN_PROGRESS = True
@@ -230,7 +239,9 @@ def handle_client(conn, addr, NICKS):
                     else:
                         send(conn, "#[SERVER] That Nick Wasn't Valid")
         except Exception as err:
+            #This is for debugging false disconnects:
             print(err)
+
             if not kicked:
                 connected = False
                 try:
