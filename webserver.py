@@ -1,4 +1,4 @@
-#11
+#12
 import socket
 import threading
 import time
@@ -154,7 +154,8 @@ def handle_client(conn, addr, NICKS):
                     if msg[0] == "!":
                         print(f"[COMMAND INVOCATION]: [{crrnt_nick}]: {msg}")
                         if msg == "!Ping":
-                            send(conn, f"!Ping{time.time()}")
+                            send(conn, f"!Ping {time.time()}")
+                            send(conn, "!Pong")
                         elif msg[:9] == "!Whisper ":
                             whispersubject = msg.split(" ")[1]
                             if whispersubject in NICKS:

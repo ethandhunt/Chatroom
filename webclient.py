@@ -1,4 +1,4 @@
-#5
+#6
 import socket
 import threading
 import sys
@@ -30,6 +30,7 @@ SERVER = input("Enter Local Network Server IP: ")
 PORT = int(input("Enter Server Port: "))
 ADDR = (SERVER, PORT)
 KICKED = False
+PingTime = time.time()
 try:
     client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 except:
@@ -55,6 +56,7 @@ def checkconnectiontimer(delay):
 
 def to():
     global KICKED
+    global PingTime
     while not KICKED:
         if not KICKED:
             try:
@@ -67,6 +69,9 @@ def to():
                             send("!CheckConnec")
                             thread = threading.Thread(target=checkconnectiontimer, args=(10,))
                             thread.start()
+                        if string == "!Ping":
+                            PingTime = time.time()
+                            send("!Ping")
                         else:
                             send(string)
                     else:
@@ -91,7 +96,9 @@ def back():
                 elif msg[0] == "!":
                     if msg[0:5] == "!Ping":
                         servertime = float(msg[5:len(msg)])
-                        print(math.sqrt((time.time() - servertime) ** 2))
+                        print(f"Server to Client delay: {math.sqrt((time.time() - servertime) ** 2)}")
+                        print(f"Client to Server delay: {math.sqrt((servertime - PingTime) ** 2)}")
+                        print(f"Round trip time: {math.sqrt((time.time() - PingTime) ** 2)}")
                     elif msg == "!You Have Been Kicked By The Server":
                         KICKED = True
                         print("You Have Been Kicked By The Server")
@@ -102,7 +109,8 @@ def back():
                 else:
                     print(msg[1:len(msg)])
 
-        except:
+        except Exception as err:
+            print(err)
             new_notification("Chatroom: Alert", "[SERVER DISCONNECTED]")
             print("[SERVER DISCONNECTED]")
             sys.exit()
