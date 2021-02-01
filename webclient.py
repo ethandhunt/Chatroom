@@ -8,7 +8,8 @@ try:
     from notifypy import Notify
 except:
     pass
-def new_notification(title, message):
+
+def base_notifc(title, message):
     try:
         notification = Notify()
         notification.title = title
@@ -16,6 +17,10 @@ def new_notification(title, message):
         notification.send()
     except:
         pass
+
+def new_notification(title, message):
+    thread = threading.Thread(target=base_notifc, args=(title, message))
+    thread.start
 
 
 HEADER = 64
