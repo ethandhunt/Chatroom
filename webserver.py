@@ -65,6 +65,7 @@ def broadcast(msg):
 
 
 def send(connection, message):
+    message = message.encode(FORMAT)
     msg_length = len(message)
     send_length = str(msg_length).encode(FORMAT)
     send_length += b' ' * (HEADER - len(send_length))
@@ -228,7 +229,8 @@ def handle_client(conn, addr, NICKS):
                         NICKS += [crrnt_nick]
                     else:
                         send(conn, "#[SERVER] That Nick Wasn't Valid")
-        except:
+        except Exception as err:
+            print(err)
             if not kicked:
                 connected = False
                 try:
