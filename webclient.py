@@ -1,4 +1,4 @@
-#6
+#7
 import socket
 import threading
 import sys
@@ -69,7 +69,7 @@ def to():
                             send("!CheckConnec")
                             thread = threading.Thread(target=checkconnectiontimer, args=(10,))
                             thread.start()
-                        if string == "!Ping":
+                        elif string == "!Ping":
                             PingTime = time.time()
                             send("!Ping")
                         else:
