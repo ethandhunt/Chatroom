@@ -94,11 +94,8 @@ def back():
                     new_notification("Chatroom: Message", msg[1:len(msg)])
                     print(msg[1:len(msg)])
                 elif msg[0] == "!":
-                    if msg[0:5] == "!Ping":
-                        servertime = float(msg[5:len(msg)])
-                        print(f"Server to Client delay: {math.sqrt((time.time() - servertime) ** 2)}")
-                        print(f"Client to Server delay: {math.sqrt((servertime - PingTime) ** 2)}")
-                        print(f"Round trip time: {math.sqrt((time.time() - PingTime) ** 2)}")
+                    if msg[0:5] == "!Pong":
+                        print(f"Round trip time: {time.time() - PingTime}")
                     elif msg == "!You Have Been Kicked By The Server":
                         KICKED = True
                         print("You Have Been Kicked By The Server")
