@@ -7,3 +7,9 @@
     Same as !Whisper
 !Online
     Returns all nicks in the servers Nick array
+!CheckConnection
+    Checks connection and disconnects if server response times out
+!CheckConnec
+    Same as !CheckConnection
+!Chc
+    Same as !CheckConnection
