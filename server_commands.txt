@@ -1,3 +1,2 @@
-#2
 !Kick {Nick of target client}
     Disconnects the target client from the session
