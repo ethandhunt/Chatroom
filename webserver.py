@@ -197,8 +197,7 @@ def handle_client(conn, addr, NICKS):
                                     else:
                                         send(conn, "#You Cannot !VoteKick Yourself")
                                 else:
-                                    send(
-                                        conn, "#Invalid Subject For !VoteKick, That Nick Doesn't Exist")
+                                    send(conn, "#Invalid Subject For !VoteKick, That Nick Doesn't Exist")
                             else:
                                 send(conn, "#")
                         elif msg == "!Vote":
@@ -222,6 +221,8 @@ def handle_client(conn, addr, NICKS):
                     elif msg[0] == "#":
                         broadcast(f"{msg[0]}[{crrnt_nick}]: {msg[1:len(msg)]}")
                         print(f"{msg[0]}[{crrnt_nick}]: {msg[1:len(msg)]}")
+                    elif msg[0] == "$":
+                        broadcast(msg)
             else:
                 send(conn, "#[SERVER] Enter A Nick")
                 msg_length = conn.recv(HEADER).decode(FORMAT)

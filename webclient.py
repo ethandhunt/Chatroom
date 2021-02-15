@@ -34,7 +34,6 @@ try:
     client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 except:
     print("[ERROR] Port Error, This Port May Already Be In Use On Your Machine")
-client.connect(ADDR)
 
 def send(msg, type = ""):
     message = (f"{type}{msg}").encode(FORMAT)
@@ -71,6 +70,14 @@ def to():
                         elif string == "!Ping":
                             PingTime = time.time()
                             send("!Ping")
+                        elif string[:6] == "!File ":
+                            try:
+                                path = string[6:]
+                                file = open(path)
+                                send(file.read(), "$")
+                                file.close()
+                            except Exception as err:
+                                print(f"ERROR: {err}")
                         else:
                             send(string)
                     else:
@@ -84,7 +91,7 @@ def back():
     global connection_confirmed
     global KICKED
     while not KICKED:
-        try:
+        #try:
             msg_length = client.recv(HEADER).decode(FORMAT)
             if msg_length:
                 msg_length = int(msg_length)
@@ -101,16 +108,20 @@ def back():
                     elif msg == "!ConnectTrue":
                         connection_confirmed = True
                         print("Connection Confirmed")
-
+                elif msg[0] == "$":
+                    file = open("Receive.txt", 'w')
+                    file.write(msg[1:])
+                    file.close()
+                    print("File Received, Saved to Receive.txt")
                 else:
                     print(msg[1:len(msg)])
 
-        except Exception as err:
-            print(err)
-            new_notification("Chatroom: Alert", "[SERVER DISCONNECTED]")
-            print("[SERVER DISCONNECTED]")
-            sys.exit()
-            break
+        #except Exception as err:
+            #print(err)
+            #new_notification("Chatroom: Alert", "[SERVER DISCONNECTED]")
+            #print("[SERVER DISCONNECTED]")
+            #sys.exit()
+            #break
 
 print("[CONNECTED TO SERVER]")
 thread = threading.Thread(target=to)
