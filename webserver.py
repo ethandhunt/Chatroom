@@ -23,7 +23,7 @@ def new_notification(title, message):
 
 HEADER = 64
 port_got = False
-PORT = 5050
+PORT = 55555
 FORMAT = 'utf-8'
 NICKS = []
 VOTE_IN_PROGRESS = False
