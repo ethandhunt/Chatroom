@@ -292,6 +292,8 @@ def server_chat_and_commands():
                 file.write(string)
                 file.close()
                 print("Update Complete")
+                print("Relaunch for new update")
+                broadcast("@Server has updated")
             else:
                 print("Invalid Command")
         else:
