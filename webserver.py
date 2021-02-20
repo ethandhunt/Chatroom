@@ -1,6 +1,9 @@
 import socket
 import threading
 import time
+import urllib.request
+import os
+import sys
 try:
     from notifypy import Notify
 except:
@@ -279,7 +282,20 @@ def server_chat_and_commands():
                     NICKS.remove(target)
                     broadcast(f"@[SERVER] Kicked {target}")
                     print(f"[SERVER] Kicked {target}")
-
+            elif servertext == "!Update":
+                print("Updating")
+                fp = urllib.request.urlopen("https://raw.githubusercontent.com/ethandhunt/Chatroom/main/webserver.py")
+                mybytes = fp.read()
+                string = mybytes.decode("utf-8")
+                fp.close()
+                file = open(__file__, "w")
+                file.write(string)
+                file.close()
+                print("Update Complete")
+                ye_or_ne = input("Would You Like To Restart And Complete The Update? ye or ne")
+                if ye_or_ne == "ye":
+                    os.startfile(__file__)
+                    sys.exit()
             else:
                 print("Invalid Command")
         else:

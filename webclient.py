@@ -3,6 +3,8 @@ import threading
 import sys
 import time
 import math
+import os
+import urllib.request
 try:
     from notifypy import Notify
 except:
@@ -71,6 +73,20 @@ def to():
                         elif string == "!Ping":
                             PingTime = time.time()
                             send("!Ping")
+                        elif string == "!Update":
+                            print("Updating")
+                            fp = urllib.request.urlopen("https://raw.githubusercontent.com/ethandhunt/Chatroom/main/webclient.py")
+                            mybytes = fp.read()
+                            string = mybytes.decode("utf-8")
+                            fp.close()
+                            file = open(__file__, "w")
+                            file.write(string)
+                            file.close()
+                            print("Update Complete")
+                            ye_or_ne = input("Would You Like To Restart And Complete The Update? ye or ne")
+                            if ye_or_ne == "ye":
+                                os.startfile(__file__)
+                                sys.exit()
                         else:
                             send(string)
                     else:
