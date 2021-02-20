@@ -87,7 +87,8 @@ def to():
                             send(string)
                     else:
                         send(string, "#")
-            except:
+            except Exception as err:
+                print(err)
                 print("[SERVER DISCONNECTED]")
                 sys.exit()
                 break
