@@ -79,13 +79,13 @@ def to():
                             mybytes = fp.read()
                             string = mybytes.decode("utf-8")
                             fp.close()
-                            file = open(__file__, "w")
+                            file = open("webclient.py", "w")
                             file.write(string)
                             file.close()
                             print("Update Complete")
-                            ye_or_ne = input("Would You Like To Restart And Complete The Update? ye or ne")
+                            ye_or_ne = input("Would You Like To Restart And Complete The Update? ye or ne: ")
                             if ye_or_ne == "ye":
-                                os.startfile(__file__)
+                                os.startfile("webclient.py")
                                 sys.exit()
                         else:
                             send(string)

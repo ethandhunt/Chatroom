@@ -288,13 +288,13 @@ def server_chat_and_commands():
                 mybytes = fp.read()
                 string = mybytes.decode("utf-8")
                 fp.close()
-                file = open(__file__, "w")
+                file = open("webserver.py", "w")
                 file.write(string)
                 file.close()
                 print("Update Complete")
-                ye_or_ne = input("Would You Like To Restart And Complete The Update? ye or ne")
+                ye_or_ne = input("Would You Like To Restart And Complete The Update? ye or ne: ")
                 if ye_or_ne == "ye":
-                    os.startfile(__file__)
+                    os.startfile("webserver.py")
                     sys.exit()
             else:
                 print("Invalid Command")
