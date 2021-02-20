@@ -83,10 +83,6 @@ def to():
                             file.write(string)
                             file.close()
                             print("Update Complete")
-                            ye_or_ne = input("Would You Like To Restart And Complete The Update? ye or ne: ")
-                            if ye_or_ne == "ye":
-                                os.startfile("webclient.py")
-                                sys.exit()
                         else:
                             send(string)
                     else:
