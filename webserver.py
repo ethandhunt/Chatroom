@@ -204,6 +204,11 @@ def handle_client(conn, addr, NICKS):
                                         conn, "#Invalid Subject For !VoteKick, That Nick Doesn't Exist")
                             else:
                                 send(conn, "#")
+                        elif msg[:6] == "!Play ":
+                            Game = msg.split(" ")[1]
+                            args = " ".join(msg.split(" ")[2:])
+                            if Game == "21":
+                                broadcast("@Use !Join to join the game")
                         elif msg == "!Vote":
                             if VOTE_IN_PROGRESS and not Voted:
                                 Voted = True
