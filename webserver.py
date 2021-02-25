@@ -272,7 +272,9 @@ def server_chat_and_commands():
     global KICKED_CLIENTS
     while True:
         servertext = input()
-        if servertext[0] == "!":
+        if len(servertext) == 0:
+            #Do nothing
+        elif servertext[0] == "!":
             if servertext[:5] == "!Kick":
                 try:
                     target = servertext.split()[1]
