@@ -273,7 +273,7 @@ def server_chat_and_commands():
     while True:
         servertext = input()
         if len(servertext) == 0:
-            #Do nothing
+            pass
         elif servertext[0] == "!":
             if servertext[:5] == "!Kick":
                 try:
