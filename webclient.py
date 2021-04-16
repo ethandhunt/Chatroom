@@ -27,7 +27,7 @@ def new_notification(title, message):
 HEADER = 64
 FORMAT = 'utf-8'
 #ip configuration
-SERVER = input("Enter Local Network Server IP: ")
+SERVER = socket.gethostbyname(input("Enter Host Name: "))
 PORT = int(input("Enter Server Port: "))
 ADDR = (SERVER, PORT)
 KICKED = False

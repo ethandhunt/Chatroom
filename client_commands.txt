@@ -1,4 +1,3 @@
-#2
 !Ping
     Returns server time then checks the difference btween received server time and the current client time
 !Whisper {Nick of target client} {message}
@@ -20,4 +19,6 @@
 !Play {Game} {Additional Arguments}
     Starts a Game instance
     Games:
-        
+        none
+!Hostname
+    Returns Host Name of the Server

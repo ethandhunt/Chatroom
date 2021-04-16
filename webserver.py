@@ -35,6 +35,7 @@ server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 # gets ipv4 address of local machine
 # ONLY WORKS ON LOCAL NETWORK
 SERVER = socket.gethostbyname(socket.gethostname())
+print(f"[HOSTNAME]: {socket.gethostname()}")
 while not port_got:
     ADDR = (SERVER, PORT)
     try:
@@ -222,6 +223,8 @@ def handle_client(conn, addr, NICKS):
                                 send(conn, "#You Have Voted")
                             else:
                                 send(conn, "#You Cannot Vote")
+                        elif msg == "!HostName":
+                            send(conn, f"#{socket.gethostname()}")
                         else:
                             send(conn, f"@Invalid Command")
                     elif msg[0] == "@":
@@ -301,6 +304,8 @@ def server_chat_and_commands():
                 print("Update Complete")
                 print("Relaunch for new update")
                 broadcast("@Server has updated")
+            elif servertext == "!Online":
+                print("\n".join(NICKS))
             else:
                 print("Invalid Command")
         else:
@@ -310,7 +315,6 @@ def server_chat_and_commands():
 
 def start():
     server.listen()
-    print(f"[IP] {SERVER}")
     thread = threading.Thread(target=server_chat_and_commands)
     thread.start()
     while True:
