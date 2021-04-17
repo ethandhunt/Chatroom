@@ -5,23 +5,6 @@ import time
 import math
 import os
 import urllib.request
-try:
-    from notifypy import Notify
-except:
-    pass
-
-def base_notifc(title, message):
-    try:
-        notification = Notify()
-        notification.title = title
-        notification.message = message
-        notification.send()
-    except:
-        pass
-
-def new_notification(title, message):
-    thread = threading.Thread(target=base_notifc, args=(title, message))
-    thread.start
 
 
 HEADER = 64
@@ -83,6 +66,11 @@ def to():
                             file.write(string)
                             file.close()
                             print("Update Complete")
+                        elif string.split(" ")[0] == "!IP":
+                            if len(string.split(" ")) == 1:
+                                print(socket.gethostbyname(socket.gethostname()))
+                            else:
+                                print(socket.gethostbyname(" ".join(string.split(" ")[1:])))
                         else:
                             send(string)
                     else:
@@ -103,7 +91,6 @@ def back():
                 msg_length = int(msg_length)
                 msg = client.recv(msg_length).decode(FORMAT)
                 if msg[0] == "@":
-                    new_notification("Chatroom: Message", msg[1:len(msg)])
                     print(msg[1:len(msg)])
                 elif msg[0] == "!":
                     if msg[0:5] == "!Pong":
@@ -120,7 +107,6 @@ def back():
 
         except Exception as err:
             print(err)
-            new_notification("Chatroom: Alert", "[SERVER DISCONNECTED]")
             print("[SERVER DISCONNECTED]")
             sys.exit()
             break
