@@ -4,23 +4,6 @@ import time
 import urllib.request
 import os
 import sys
-try:
-    from notifypy import Notify
-except:
-    pass
-
-def base_notifc(title, message):
-    try:
-        notification = Notify()
-        notification.title = title
-        notification.message = message
-        notification.send()
-    except:
-        pass
-
-def new_notification(title, message):
-    thread = threading.Thread(target=base_notifc, args=(title, message))
-    thread.start
 
 HEADER = 64
 port_got = False
@@ -34,7 +17,17 @@ VOTE_ID = 0
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 # gets ipv4 address of local machine
 # ONLY WORKS ON LOCAL NETWORK
-SERVER = socket.gethostbyname(socket.gethostname())
+string = "n"
+try:
+    file = open("RequestIPExternally.txt")
+    string = file.read()
+    file.close()
+except: pass
+
+if string == "n":
+    SERVER = socket.gethostbyname(socket.gethostname())
+else:
+    SERVER = input(f"Enter IP For {socket.gethostname()}: ")
 print(f"[HOSTNAME]: {socket.gethostname()}")
 while not port_got:
     ADDR = (SERVER, PORT)
@@ -57,7 +50,7 @@ def broadcast(msg):
         send_length = str(msg_length).encode(FORMAT)
         send_length += b' ' * (HEADER - len(send_length))
         if msg[0] == "@":
-            new_notification("Chatroom: Message", msg[1:len(msg)])
+            pass
         for client in CLIENTS:
             try:
                 client.send(send_length)
@@ -265,8 +258,6 @@ def handle_client(conn, addr, NICKS):
                         pass
                     print(f"[DISCONNECT] {crrnt_nick} Disconnected")
                     broadcast(f"@[SERVER] {crrnt_nick} Disconnected")
-                    new_notification("Chatroom: Client Disconnect",
-                                     f"{crrnt_nick} Disconnected")
                 else:
                     print(f"[DISCONNECT] {addr} Disconnected")
 
