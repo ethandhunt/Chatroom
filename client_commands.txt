@@ -22,3 +22,5 @@
         none
 !Hostname
     Returns Host Name of the Server
+!IP {Name of host}
+    Returns the IP of the host, or if there is no host argument returns the ip of the current machine
